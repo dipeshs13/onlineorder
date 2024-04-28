@@ -110,9 +110,17 @@ button[type="submit"] {
       </div>
     </div>
     <form action="../actions/edit_menu_item_action.php" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="<?php echo $row['name']; ?>" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"
+        style="height: 100px; width: 100%;" 
+        required
+        ><?php echo $row['description']; ?></textarea>
       </div>
       <div class="form-group">
         <label for="price">Price:</label>
@@ -122,7 +130,7 @@ button[type="submit"] {
             <label>Old Image: </label>
             <img src="../<?php echo $row['image_path']; ?>" alt="<?php echo $row['name']; ?>" style="width: 100px;">
             <label>New Image:</label>
-            <input type="file" id="image" name="image" required>
+            <input type="file" id="image" name="image">
         </div>
         <button type="submit">Edit</button>
     </form>

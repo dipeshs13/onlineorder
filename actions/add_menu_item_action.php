@@ -8,13 +8,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $price = $_POST['price'];
         $description = $_POST['description'];
         $image = $_FILES['image']['name'];
-        // echo "<pre>";
-        // print_r($_FILES);
-        // print_r($_POST);
-        // die();
-        // save image to folder
-        $target = "../images/".basename($image);
-        $image_path = "images/".basename($image);
+        $new_name = uniqid('', true).'.'.pathinfo($image, PATHINFO_EXTENSION);
+
+        $target = "../images/".$new_name;
+        $image_path = "images/".$new_name;
 
         // Prepare the SQL statement with placeholders
         $query = "INSERT INTO foods (name, price, description, image_path) VALUES (?, ?, ?, ?)";

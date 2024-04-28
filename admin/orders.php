@@ -4,18 +4,37 @@
   }
 
   include_once '../utils/db.php';
-  //select all orders from the orders table and join users table and foods table
-  $query = "SELECT o.id AS orderid, o.status, u.fullname, u.phone, f.name, f.price, f.image_path, o.location 
-  FROM orders AS o
-  JOIN order_items AS oi ON o.id = oi.order_id
-  JOIN users AS u ON o.user_id = u.id 
-  JOIN foods AS f ON oi.food_id = f.id";
 
+$query = "
+  SELECT
+    orders.id,
+    users.fullname as name,
+    GROUP_CONCAT(foods.name) as food_names,
+    GROUP_CONCAT(order_items.quantity) as quantities,
+    GROUP_CONCAT(foods.price) as prices,
+    SUM(foods.price * order_items.quantity) as total_price,
+    SUM(order_items.quantity) as total_quantity,
+    orders.location,
+    users.phone,
+    orders.status
+  FROM
+    orders
+  JOIN users ON orders.user_id = users.id
+  JOIN order_items ON orders.id = order_items.order_id
+  JOIN foods ON order_items.food_id = foods.id
+  GROUP BY
+    orders.id
+  ORDER BY
+  orders.created_at DESC
+  ";
 
 
   $result = $conn->query($query);
+  // $orders = $result->fetch_all(MYSQLI_ASSOC);
 
-  ?>
+
+
+?>
 
   <!DOCTYPE html>
   <html lang="en">
@@ -74,11 +93,6 @@
           <span>Online food ordering</span>
           <h2>Orders</h2>
         </div>
-          <div class="header_search">
-              <span>
-                  <a href="./add_menu_item.php">Add new item</a>
-              </span>
-          </div>
       </div>
 
       <div class="tabular">
@@ -99,10 +113,11 @@
                 <th>User Name</th>
                 <th>Food Name</th>
                 <th>Price</th>
-                <th>Image</th>
-                  <th>Location</th>
-                  <th>Phone</th>
-                  <th>Status</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Location</th>
+                <th>Phone</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -113,26 +128,26 @@
                   echo "<tr><td colspan='8'>No orders</td></tr>";
               }
               while ($row = $result->fetch_assoc()) { ?>
-                  <tr>
-                      <td><?php echo $row['orderid']; ?></td>
-                      <td><?php echo $row['fullname']; ?></td>
-                      <td><?php echo $row['name']; ?></td>
-                      <td><?php echo $row['price']; ?></td>
-                      <td><img src="../<?php echo $row['image_path']; ?>" alt="food image" style="width: 100px;"></td>
-                      <td><?php echo $row['location']; ?></td>
-                      <td><?php echo $row['phone']; ?></td>
-                      <td><?php echo $row['status']; ?></td>
-                      <td>
-                          <?php if ($row['status'] == 'pending') { ?>
-                              <a href="../actions/update_order_status.php?orderid=<?php echo $row['orderid']; ?>&status=completed">Complete</a>
-                          <?php } else { ?>
-                              <a href="../actions/update_order_status.php?orderid=<?php echo $row['orderid']; ?>&status=pending">Pending</a>
-                          <?php } ?>
+                <tr>
+                  <td><?php echo $row['id'] ?></td>
+                  <td><?php echo $row['name'] ?></td>
+                  <td><?php echo $row['food_names'] ?></td>
+                  <td><?php echo $row['prices'] ?></td>
+                  <td><?php echo $row['quantities'] ?></td>
+                  <td><?php echo $row['total_price'] ?></td>
+                  <td><?php echo $row['location'] ?></td>
+                  <td><?php echo $row['phone'] ?></td>
+                  <td><?php echo $row['status'] ?></td>
+                  <td>
+                    <?php if ($row['status'] == 'pending') { ?>
+                      <a href="../actions/update_order_status.php?id=<?php echo $row['id'] ?>&status=completed">Complete</a>
+                      <a href="../actions/update_order_status.php?id=<?php echo $row['id'] ?>&status=cancelled">Cancel</a>
+                    <?php } else { ?>
+                      <a href="../actions/update_order_status.php?id=<?php echo $row['id'] ?>&status=pending">Pending</a>
+                    <?php } ?>
 
-                          <a href="../actions/delete_order.php?orderid=<?php echo $row['orderid']; ?>">Delete</a>
-                      </td>
-
-                  </tr>
+                  </td>
+                </tr>
               <?php } ?>
             </tbody>
           </table>

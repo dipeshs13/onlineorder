@@ -27,10 +27,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $_SESSION['isAdmin'] = true;
             header('Location: ../index.php');
         } else {
-            header('Location: ../login.php?error= Incorrect password');
+            header('Location: ../admin/login.php?error= Incorrect password');
         }
     } else {
-        header('Location: ../login.php?error= User does not exist');
+        header('Location: ../admin/login.php?error= User not found');
     }
     $conn->close();
     

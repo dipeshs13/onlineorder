@@ -187,7 +187,7 @@ button{
           <?php if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1): ?>
             <li><a href="./admin/dashboard.php">Dashboard</a></li>
           <?php else: ?>
-            <li><a href="#">Order</a></li>
+            <li><a href="./order.php">Order</a></li>
           <?php endif; ?>
           <li><a href="./actions/logout_action.php">Logout</a></li>
         <?php else: ?>
