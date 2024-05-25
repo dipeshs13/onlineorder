@@ -72,11 +72,7 @@ button[type="submit"] {
         </a>
       </li>
       <li>
-        <a href="">
-          <!-- <i class="fas fa-cog"></i> -->
-          <span>Settings</span>
-        </a>
-      </li>
+        
 
       <li class="logout">
         <a href="">

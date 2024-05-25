@@ -23,9 +23,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if(password_verify($password, $row['password'])){
             session_start();
             $_SESSION['email'] = $email;
-            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['ad_id'] = $row['id'];
             $_SESSION['isAdmin'] = true;
-            header('Location: ../index.php');
+            header('Location: ../admin/dashboard.php');
         } else {
             header('Location: ../admin/login.php?error= Incorrect password');
         }

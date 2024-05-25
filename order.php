@@ -11,15 +11,13 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
 $order_items = [];
 foreach ($orders as $order) {
     $order_id = $order['id'];
-    $query = "SELECT foods.name, foods.price, order_items.quantity FROM order_items JOIN foods ON order_items.food_id = foods.id WHERE order_items.order_id = $order_id";
+    $query = "SELECT foods.name, foods.price, order_items.quantity 
+    FROM order_items JOIN foods ON order_items.food_id = foods.id WHERE order_items.order_id = $order_id";
     $result = $conn->query($query);
     $order_items[$order_id] = $result->fetch_all(MYSQLI_ASSOC);
+    $order_items[$order_id]['status'] = $order['status'];
 }
 
-
-// echo "<pre>";
-// print_r($order_items);
-// die();
 ?>
 
 <!doctype html>
@@ -209,41 +207,48 @@ foreach ($orders as $order) {
                 } else {
                     foreach ($order_items as $order_id => $foods) {
                         $order_total = 0;
-                        foreach ($foods as $food) {
-                            $order_total += $food['price'] * $food['quantity'];
-                            $total += $food['price'] * $food['quantity'];
+                        foreach ($foods as $food=>$order_item) {
+                            if($food == 'status') {
+                                continue;
+                            }
+                            $order_total += $order_item['price'] * $order_item['quantity'];
                         }
                         ?>
                         <tr>
                             <td>
                                 <?php
-                                foreach ($foods as $food) {
-                                    echo $food['name'] . '<br>';
+                                foreach ($foods as $food =>$order_item) {
+                                    if($food == 'status') {
+                                        continue;
+                                    }
+                                    echo $order_item['name'] . '<br>';
                                 }
                                 ?>
                             </td>
                             <td>
                                 <?php
-                                foreach ($foods as $food) {
-                                    echo $food['price'] . '<br>';
+                                foreach ($foods as $food=>$order_item) {
+                                    if($food == 'status') {
+                                        continue;
+                                    }
+                                    echo $order_item['price'] . '<br>';
                                 }
                                 ?>
                             </td>
                             <td>
                                 <?php
-                                foreach ($foods as $food) {
-                                    echo $food['quantity'] . '<br>';
+                                foreach ($foods as $food=>$order_item) {
+                                    if($food == 'status') {
+                                        continue;
+                                    }
+                                    echo $order_item['quantity'] . '<br>';
                                 }
                                 ?>
                             </td>
                             <td><?php echo $order_total ?></td>
                             <td>
                                 <?php
-                                if ($order['status'] == 'pending') {
-                                    echo 'Pending';
-                                } else {
-                                    echo 'Delivered';
-                                }
+                                echo $foods['status'];
                                 ?>
                             </td>
                             <?php

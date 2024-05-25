@@ -151,7 +151,7 @@ if (empty($food_ids)) {
         }
 
         #modle form .form-group input {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;

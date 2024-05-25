@@ -1,7 +1,36 @@
 <?php session_start();
-if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] !== true) {
+if (!isset($_SESSION['ad_id'])) {
   header('Location: ../login.php');
 }
+include '../utils/db.php';
+$sql = "SELECT COUNT(*) AS total_confirmed FROM orders WHERE status = 'confirmed'";
+$result = $conn->query($sql);
+$confirmed_orders = 0;
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $confirmed_orders = $row['total_confirmed'];
+}
+
+$sql_pending = "SELECT COUNT(*) AS total_pending FROM orders WHERE status = 'pending'";
+$result_pending = $conn->query($sql_pending);
+$pending_orders = 0;
+
+if ($result_pending->num_rows > 0) {
+    $row_pending = $result_pending->fetch_assoc();
+    $pending_orders = $row_pending['total_pending'];
+}
+
+$sql_cancelled = "SELECT COUNT(*) AS total_cancelled FROM orders WHERE status = 'cancelled'";
+$result_cancelled = $conn->query($sql_cancelled);
+$cancelled_orders = 0;
+
+if ($result_cancelled->num_rows > 0) {
+    $row_cancelled = $result_cancelled->fetch_assoc();
+    $cancelled_orders = $row_cancelled['total_cancelled'];
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +51,7 @@ if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] !== true) {
     <div class="logo"></div>
     <ul class="menu">
       <li class="active">
-        <a href="./dashboard.php">
+        <a href="./index.php">
           <!-- <i class="fas fa-tachometer-alt"></i> -->
           <span>Dashboard</span>
         </a>
@@ -39,12 +68,7 @@ if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] !== true) {
           <span>Orders</span>
         </a>
       </li>
-      <li>
-        <a href="">
-          <!-- <i class="fas fa-cog"></i> -->
-          <span>Settings</span>
-        </a>
-      </li>
+   
 
       <li class="logout">
         <a href="">
@@ -62,104 +86,53 @@ if (!isset($_SESSION['isAdmin']) || $_SESSION['isAdmin'] !== true) {
         <h2>Dashboard</h2>
       </div>
     </div>
+    
     <div class="card_container">
-      <h3 class="main_title">Today's date</h3>
-      <div class="card">
-        <div class="appointment_card">
-          <div class="card_header">
-            <div class="appointment">
-              <span class="title">
-                Total Orders
-              </span>
-              <span class="appointment_value">
-                30 orders
-              </span>
-            </div>
-            <!-- <i class="fas fa-dollar-sign icon">
-            </i> -->
-            <!-- <i class="fas fa-users icon dark-green"> -->
-            </i>
+      <div class="appointment_card">
+        <div class="card_header">
+          <div class="appointment">
+            <span class="title">Confirmed Orders</span>
+            <span class="appointment_value"><?php echo $confirmed_orders; ?> orders</span>
           </div>
-          <!-- <span class="card_detail">
-            **** **** **** 3484
-          </span> -->
         </div>
-
-        <div class="appointment_card">
-          <div class="card_header">
-            <div class="appointment">
-              <span class="title">
-                Confirm Orders
-              </span>
-              <span class="appointment_value">
-                10 orders
-              </span>
-            </div>
-            <!-- <i class="fas fa-list icon dark-purple">
-            </i> -->
-            <!-- <i class="fas fa-check icon dark-blue"> -->
-            </i>
-          </div>
-          <!-- <span class="card_detail">
-            **** **** **** 5544
-          </span> -->
-        </div>
-
-        <div class="appointment_card">
-          <div class="card_header">
-            <div class="appointment">
-              <span class="title">
-                Cancel Orders
-              </span>
-              <span class="appointment_value">
-                5 orders
-              </span>
-            </div>
-            <!-- <i class="fas fa-users icon dark-green">
-            </i> -->
-            <!-- <i class="fas fa-list icon dark-purple"> -->
-            </i>
-          </div>
-          <!-- <span class="card_detail">
-            **** **** **** 8896
-          </span> -->
-        </div>
-
-
       </div>
+
+      <div class="appointment_card">
+        <div class="card_header">
+          <div class="appointment">
+            <span class="title">Cancelled Orders</span>
+            <span class="appointment_value"><?php echo $cancelled_orders; ?> orders</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="appointment_card">
+        <div class="card_header">
+          <div class="appointment">
+            <span class="title">Pending Orders</span>
+            <span class="appointment_value"><?php echo $pending_orders; ?> orders</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="appointment_card">
+        <div class="card_header">
+          <div class="appointment">
+            <span class="title">Total no of items</span>
+            <span class="appointment_value">5 orders</span>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="appointment_card">
+        <div class="card_header">
+          <div class="appointment">
+            <span class="title">Cancel Orde</span>
+            <span class="appointment_value">5 orders</span>
+          </div>
+        </div>
+      </div> -->
     </div>
-
-    <!-- <div class="tabular">
-      <h3 class="main_title">Appointment data</h3>
-      <div class="table_container">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Appointment Date</th>
-              <th>Appointment Time</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                2024-02-20
-              </td>
-              <td>Dipesh Kumar Shrestha</td>
-              <td>9852829419</td>
-              <td>2024-02-26</td>
-              <td>5:00pm - 6:00pm</td>
-              <td>Pending</td>
-              <td><button>Edit</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div> -->
   </div>
 </body>
 

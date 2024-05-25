@@ -127,60 +127,49 @@ body{
 }
 
 /* card container */
-.card_container{
+.card_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     background: #fff;
     padding: 2rem;
     border-radius: 10px;
 }
-.card{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
 
-.main_title{
-    color: black;
-    padding-bottom: 10px;
-    font-size: 15px;
-}
-.appointment_card{
-    background: black;
+.appointment_card {
+    background: #333; /* Example background color, change as needed */
     border-radius: 10px;
-    padding: 1.2rem;
-    width: 290px;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.5s ease-in-out;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+    width: 25%;
 }
 
-.appointment_card:hover{
+.appointment_card:hover {
     transform: translateY(-5px);
 }
 
-.card_header{
+.card_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
-.appointment{
+
+.appointment {
     display: flex;
     flex-direction: column;
 }
-.title{
+
+.title {
     font-size: 20px;
-    /* font-weight: ; */
     color: #fff;
 }
-.appointment_value{
+
+.appointment_value {
     font-size: 24px;
-    font-family:'Courier New', Courier, monospace;
     font-weight: 600;
     color: #fff;
-}
-.icon{
+}.icon{
     color: #fff;
     padding: 1rem;
     height: 60px;

@@ -72,11 +72,7 @@ $query = "
           </a>
         </li>
         <li>
-          <a href="">
-            <!-- <i class="fas fa-cog"></i> -->
-            <span>Settings</span>
-          </a>
-        </li>
+         
 
         <li class="logout">
           <a href="">
@@ -140,7 +136,7 @@ $query = "
                   <td><?php echo $row['status'] ?></td>
                   <td>
                     <?php if ($row['status'] == 'pending') { ?>
-                      <a href="../actions/update_order_status.php?id=<?php echo $row['id'] ?>&status=completed">Complete</a>
+                      <a href="../actions/update_order_status.php?id=<?php echo $row['id'] ?>&status=confirmed">Complete</a>
                       <a href="../actions/update_order_status.php?id=<?php echo $row['id'] ?>&status=cancelled">Cancel</a>
                     <?php } else { ?>
                       <a href="../actions/update_order_status.php?id=<?php echo $row['id'] ?>&status=pending">Pending</a>

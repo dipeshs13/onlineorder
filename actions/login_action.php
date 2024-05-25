@@ -22,7 +22,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         //verify password
         if(password_verify($password, $row['password'])){
             session_start();
-            $_SESSION['email'] = $email;
+            $_SESSION['user_email'] = $email;
             $_SESSION['user_id'] = $row['id'];
             header('Location: ../index.php');
         } else {
